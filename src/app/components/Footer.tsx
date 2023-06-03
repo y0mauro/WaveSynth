@@ -2,12 +2,12 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-800 py-4  fixed bottom-0 left-0  w-screen h-12 ">
+    <footer className=" bg-purple-900 py-4  mt-auto left-0   h-12 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="text-gray-400">
             <p>
-              &copy; {new Date().getFullYear()} Your Website. All rights
+              &copy; {new Date().getFullYear()} Wave Synth. All rights
               reserved.
             </p>
           </div>
