@@ -1,4 +1,6 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+
+
 
 const Audioplayer: React.FC = () => {
   let isFiltering = false;
@@ -14,6 +16,12 @@ const Audioplayer: React.FC = () => {
   const gainNode = audioContext.createGain();
   const filterNode = audioContext.createBiquadFilter();
   filterNode.type = "lowpass";
+
+  // creating the EQFilters
+
+  const lowFilter = new BiquadFilterNode(audioContext, {type: "lowshelf", frequency:200, })
+  const midFilter = new BiquadFilterNode(audioContext, {type: "peaking", frequency:500})
+  const highFilter = new BiquadFilterNode(audioContext, {type:"highshelf", frequency:8000})
 
   const buffer = new AudioBufferSourceNode(audioContext);
 
@@ -62,6 +70,34 @@ const Audioplayer: React.FC = () => {
 
     gainNode.gain.value = parseFloat(event.target.value);
   };
+    function onHighShelfChange(event: React.ChangeEvent<HTMLInputElement>) {
+
+      highFilter.gain.value = parseFloat(event.target.value);
+      connectEQ();
+
+  }
+
+  function onMidShelfChange(event: React.ChangeEvent<HTMLInputElement>) {
+    midFilter.gain.value = parseFloat(event.target.value);
+    connectEQ();
+  }
+
+  function onLowShelfChange(event: React.ChangeEvent<HTMLInputElement>) {
+    lowFilter.gain.value = parseFloat(event.target.value);
+    connectEQ();
+  }
+
+  function connectEQ(){
+      source.current!.disconnect();
+      analyzer.current = audioContext.createAnalyser()
+      source.current.connect(analyzer.current);
+      analyzer.current!.connect(lowFilter)
+      lowFilter.connect(midFilter);
+      midFilter.connect(highFilter);
+      highFilter.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      visualizeData();
+  }
 
   const handleFilterButtonPressed = () => {
     isFiltering = !isFiltering;
@@ -78,10 +114,13 @@ const Audioplayer: React.FC = () => {
 
   const onFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     source.current!.disconnect();
-    filterNode.frequency.value = parseFloat(event.target.value);
-    source.current!.connect(filterNode);
-    filterNode.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+      filterNode.frequency.value = parseFloat(event.target.value);
+      analyzer.current = audioContext.createAnalyser()
+      source.current.connect(analyzer.current);
+      analyzer.current!.connect(filterNode);
+      filterNode.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+    visualizeData();
   };
 
   return (
@@ -103,6 +142,7 @@ const Audioplayer: React.FC = () => {
         />
       )}
 
+      Volume
 <input
   id="audioPlayerGainControl"
   className=" accent-purple-700"
@@ -113,18 +153,58 @@ const Audioplayer: React.FC = () => {
   step="0.01"
   value="1"
 />
+      Low
+      <input
+          id="lowShelfControl"
+          className=" accent-purple-700"
+          onChange={onLowShelfChange}
+          type="range"
+          min="-50"
+          max="20"
+          step="0.1"
+          value="1"
+
+      />
+
+      Mid
+      <input
+          id="midShelfControl"
+          className=" accent-purple-700"
+          onChange={onMidShelfChange}
+          type="range"
+          min="-50"
+          max="20"
+          step="0.1"
+          value="1"
+      />
+
+      High
+      <input
+          id="highShelfControl"
+          className=" accent-purple-700"
+          onChange={onHighShelfChange}
+          type="range"
+          min="-50"
+          max="50"
+          step="0.1"
+          value="1"
+      />
+      LowpassFilter
+      <input
+          id="audioFilterControl"
+          onChange={onFilterChange}
+          className=" accent-purple-700"
+          type="range"
+          min="0"
+          max="3000"
+          step="5"
+          value="2000"
+      ></input>
+
+
 
       <canvas ref={canvasRef} width={500} height={200} id="canvasVisualizer" />
-      <input
-        id="audioFilterControl"
-        onChange={onFilterChange}
-        className=" accent-purple-700"
-        type="range"
-        min="0"
-        max="3000"
-        step="5"
-        value="2000"
-      ></input>
+
       {/*<button id="audioFilterControl" onClick={handleFilterButtonPressed}>Apply Filter</button>*/}
     </div>
   );
