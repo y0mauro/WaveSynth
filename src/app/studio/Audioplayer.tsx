@@ -211,3 +211,104 @@ const Audioplayer: React.FC = () => {
 };
 
 export default Audioplayer;
+/**
+ * 
+ * 
+ *  
+ *
+function LowShelfControl({ gainNode }: { gainNode:GainNode }) {
+  const lowShelfLeap = useAppSelector(state => state.lowShelfReducer.value);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    gainNode.gain.value = (lowShelfLeap);
+  },[lowShelfLeap,gainNode])
+
+  const onLowShelfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Low Shelf is now " + event.target.value);
+
+    dispatch(setLowShelf(parseFloat(event.target.value)));
+  };
+  return <input
+  id="lowFilterControl"
+  onChange={onLowShelfChange}
+  className=" accent-purple-700"
+  type="range"
+  min="-50"
+  max="20"
+  step="0.1"
+  value={lowShelfLeap}
+></input>
+}
+
+function MidShelfControl({ gainNode }: { gainNode:GainNode }) {
+  const midShelfLeap = useAppSelector(state => state.midShelfReducer.value);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    gainNode.gain.value = (midShelfLeap);
+  },[midShelfLeap,gainNode])
+
+  const onMidShelfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Mid Shelf is now " + event.target.value);
+
+    dispatch(setMidShelf(parseFloat(event.target.value)));
+  };
+  return <input
+  id="midShelfControl"
+  className="accent-purple-700"
+  onChange={onMidShelfChange}
+  type="range"
+  min="-50"
+  max="20"
+  step="0.1"
+  value={midShelfLeap}
+></input>
+}
+
+function HighShelfControl({ gainNode }: { gainNode:GainNode }) {
+  const highShelfLeap = useAppSelector(state => state.highShelfReducer.value);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    gainNode.gain.value = (highShelfLeap);
+  },[highShelfLeap,gainNode])
+
+  const onHighShelfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("High Shelf is now " + event.target.value);
+
+    dispatch(setHighShelf(parseFloat(event.target.value)));
+  };
+  return <input
+  id="highShelfControl"
+  className="accent-purple-700"
+  onChange={onHighShelfChange}
+  type="range"
+  min="-50"
+  max="50"
+  step="0.1"
+  value={highShelfLeap}
+></input>
+}
+
+function LowPassControl({ gainNode }: { gainNode:GainNode }) {
+  const lowPassLeap = useAppSelector(state => state.lowPassReducer.value);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    gainNode.gain.value = (lowPassLeap);
+  },[lowPassLeap,gainNode])
+
+  const onLowPassChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Low Pass Filter is now " + event.target.value);
+
+    dispatch(setLowPass(parseFloat(event.target.value)));
+  };
+  return <input
+  id="lowPassFilterControl"
+  onChange={onLowPassChange}
+  className=" accent-purple-700"
+  type="range"
+  min="3000"
+  max="5"
+  step="2000"
+  value={lowPassLeap}
+></input>
+}
+**/
