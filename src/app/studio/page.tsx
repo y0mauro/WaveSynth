@@ -1,21 +1,8 @@
-"use client"; // This is a client component 👈🏽
-
-import React, { useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { WaveSurfer } from 'wavesurfer-react';
-import AudioPlayer from "./Audioplayer.tsx"
+import React from "react";
+import LeapMotion from "./Leap-motion";
 
 const SoundWaveUploader = () => {
-
-
-  return(
-      <div className='flex'>
-      <AudioPlayer></AudioPlayer>
-        <AudioPlayer></AudioPlayer>
-      </div>
-  )
-
-
+  return <LeapMotion />;
 };
 
 export default SoundWaveUploader;

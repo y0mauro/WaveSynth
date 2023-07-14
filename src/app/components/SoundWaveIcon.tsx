@@ -1,11 +1,12 @@
 import React from "react";
 
-const SoundWaveIcon = (  { color = "white", size =50  }) => {
+const SoundWaveIcon = ({ color = "white", size = 50 }) => {
   return (
     <svg
-      fill= {color}
+      fill={color}
       xmlns="http://www.w3.org/2000/svg"
       width={size}
+      className="inline"
       height={size}
       viewBox="0 0 24 24"
     >

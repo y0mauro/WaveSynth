@@ -3,15 +3,18 @@ import SoundWaveIcon from "./SoundWaveIcon";
 import Link from "next/link";
 
 const Links = [
-    { label: "About", route: "/about" },
-    { label: "Contact", route: "/contact" },
-    { label: (
+  { label: "About", route: "/about" },
+  { label: "Contact", route: "/contact" },
+  {
+    label: (
       <Fragment>
-        Studio  <SoundWaveIcon  color="orange" size={30}/>
+        <div className="pr-1">Studio </div>{" "}
+        <SoundWaveIcon color="orange" size={30} />
       </Fragment>
     ),
-    route: "/studio" },
-  ];
+    route: "/studio",
+  },
+];
 
 const NavBar: React.FC = () => {
   return (
@@ -20,18 +23,15 @@ const NavBar: React.FC = () => {
         <div className="flex items-center justify-between h-5">
           <div className="flex items-center">
             <div className="flex-shrink-0  cursor-pointer">
-              
               <Link href={"/"}>
-              <SoundWaveIcon />
+                <SoundWaveIcon />
               </Link>
-              
             </div>
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
+              <div className="ml-10 flex items-center space-x-4">
                 {Links.map(({ label, route }, index) => (
                   <Link
-                    className="text-gray-300 hover:bg-gray-400 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex "
-             
+                    className="text-gray-300 items-center hover:bg-gray-400 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex "
                     href={route}
                   >
                     {label}
