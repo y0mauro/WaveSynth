@@ -22,6 +22,7 @@ const LeapMotion = () => {
   const dispatch = useAppDispatch();
   const [handVisible, setHandVisible] = useState(false);
   const [frish, setFrish] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     // Callback khi có dữ liệu từ Leap Motion
@@ -117,12 +118,24 @@ const LeapMotion = () => {
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   };
 
+  // Info-Popup
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
   return (
     <div>
-      <h2 className="text-4xl p-5 font-bold mb-6">
-        {" "}
-        Studio <SoundWaveIcon color="orange" />
-      </h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-4xl p-5 font-bold mb-6">
+          {" "}
+          Studio <SoundWaveIcon color="orange" />
+        </h2>
+        <div className="info-container">
+          <button className="info-button" onClick={openModal}>
+            How do I use the virtual DJ?
+          </button>
+        </div>
+      </div>
       {/* <div>
         {handVisible && <div>Volume: {volume}</div>}
         {!handVisible && <div>Volume error: {volume}</div>}
@@ -130,11 +143,44 @@ const LeapMotion = () => {
         <div>Delay: {delay}</div>
         <div>Grabstrength: {frish}</div>
       </div> */}
+      {isOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setIsOpen(false)}>
+              &times;
+            </span>
+            <h1 style={{ fontSize: "1.5em", fontWeight: "bold" }}>General information:</h1>
+            <p style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></p>
+            <p>Please keep in mind that the range is limited</p>
+            <p>To have the best experience you should stay in the detection range of the controller</p>
+            <p style={{ marginTop: "1em", marginBottom: "1em" }}></p>
+            <h1 style={{ fontSize: "1.5em", fontWeight: "bold" }}>Volume controls:</h1>
+            <p style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></p>
+            <p>Decide with which hand you want to use the virtual DJ </p>
+            <p>If you want to use your left hand, then form a fist and extend your thumb</p>
+            <p>Your thumb should point to the right and your palm downward</p>
+            <p>Moving your hand upwards increases the volume</p>
+            <p>Moving your hand downwards decreases the volume</p>
+            <p style={{ marginTop: "1em", marginBottom: "1em" }}></p>
+            <h1 style={{ fontSize: "1.5em", fontWeight: "bold" }}>Filter controls:</h1>
+            <p style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></p>
+            <p>Hold your hand above the controller and hold an imaginary bottle horizontally in your hand</p>
+            <p>Moving your hand to the right increases the value of the filter</p>
+            <p>Moving your hand to the left decreases the value of the filter</p>
+            <p style={{ marginTop: "1em", marginBottom: "1em" }}></p>
+            <h1 style={{ fontSize: "1.5em", fontWeight: "bold" }}>Changing filters:</h1>
+            <p style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></p>
+            <p>To change the filter you should hold your fully opened hand above the controller</p>
+            <p>Your palm should now face the controller</p>
+            <p>Moving the hand upwards or downwards can change them</p>
+            <p>The levels of filter control are based on the structure of the Studio page</p>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-10">
         <Audioplayer />
-        
-          <AudioplayerRight />
-        
+        <AudioplayerRight />
       </div>
     </div>
   );
