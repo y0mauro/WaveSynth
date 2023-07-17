@@ -24,7 +24,7 @@ const NavBar: React.FC = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0  cursor-pointer">
               <Link href={"/"}>
-                <SoundWaveIcon />
+                <SoundWaveIcon /> 
               </Link>
             </div>
             <div className="hidden md:block">

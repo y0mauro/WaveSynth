@@ -15,6 +15,7 @@ import { setHighRight } from "@/store/slices/right/highfilter_slice";
 import { setDelayRight } from "@/store/slices/right/delay_slice";
 import AudioplayerRight from "./AudioplayerRight";
 import SoundWaveIcon from "../components/SoundWaveIcon";
+import InstructionsModal from "../components/InstructionsModal";
 const LeapMotion = () => {
   const volume = useAppSelector((state) => state.volumeReducer.value);
   const lowfilter = useAppSelector((state) => state.lowFilterReducer.value);
@@ -23,9 +24,24 @@ const LeapMotion = () => {
   const [handVisible, setHandVisible] = useState(false);
   const [frish, setFrish] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     // Callback khi có dữ liệu từ Leap Motion
+
+    const escapeListener = (e) => {
+      if (e.key === "Escape") {
+        closeModal();
+      }
+    };
+    window.addEventListener("keydown", escapeListener);
+
+    // Cleanup function to remove the listener when the component unmounts
+
     console.log("Leap Motion Run ");
     const handleFrame = (frame) => {
       if (frame.hands.length > 0) {
@@ -104,6 +120,16 @@ const LeapMotion = () => {
     const controller = new Leap.Controller();
     controller.connect();
 
+    controller.on("deviceConnected", () => {
+      console.log("Leap device has been connected.");
+      setIsConnected(true);
+    });
+
+    controller.on("deviceDisconnected", () => {
+      console.log("Leap device has been disconnected.");
+      setIsConnected(false);
+    });
+
     // Đăng ký callback cho sự kiện frame
     controller.on("frame", handleFrame);
 
@@ -131,9 +157,31 @@ const LeapMotion = () => {
           Studio <SoundWaveIcon color="orange" />
         </h2>
         <div className="info-container">
-          <button className="info-button" onClick={openModal}>
-            How do I use the virtual DJ?
-          </button>
+          <div className="grid gap-1">
+            <button
+              className="text-gray-900
+             bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4
+              focus:ring-gray-200 font-medium rounded-lg text-sm px-2.5 py-1 mr-2 mb-2 dark:bg-gray-800
+               dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600
+                dark:focus:ring-gray-700"
+              onClick={openModal}
+            >
+              <span> How do I use WaveSynth? </span>
+              <SoundWaveIcon color="orange" className="pr-1"></SoundWaveIcon>
+            </button>
+
+            <div
+              className={`py-2 px-4 rounded-full border-2 focus:outline-none text-white ${
+                isConnected
+                  ? "border-green-700 text-green-700 "
+                  : "border-red-700 text-red-700"
+              }`}
+            >
+              {isConnected
+                ? "Leap Motion Connected"
+                : "Leap Motion Disconnected"}
+            </div>
+          </div>
         </div>
       </div>
       {/* <div>
@@ -143,40 +191,7 @@ const LeapMotion = () => {
         <div>Delay: {delay}</div>
         <div>Grabstrength: {frish}</div>
       </div> */}
-      {isOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={() => setIsOpen(false)}>
-              &times;
-            </span>
-            <h1 style={{ fontSize: "1.5em", fontWeight: "bold" }}>General information:</h1>
-            <p style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></p>
-            <p>Please keep in mind that the range is limited</p>
-            <p>To have the best experience you should stay in the detection range of the controller</p>
-            <p style={{ marginTop: "1em", marginBottom: "1em" }}></p>
-            <h1 style={{ fontSize: "1.5em", fontWeight: "bold" }}>Volume controls:</h1>
-            <p style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></p>
-            <p>Decide with which hand you want to use the virtual DJ </p>
-            <p>If you want to use your left hand, then form a fist and extend your thumb</p>
-            <p>Your thumb should point to the right and your palm downward</p>
-            <p>Moving your hand upwards increases the volume</p>
-            <p>Moving your hand downwards decreases the volume</p>
-            <p style={{ marginTop: "1em", marginBottom: "1em" }}></p>
-            <h1 style={{ fontSize: "1.5em", fontWeight: "bold" }}>Filter controls:</h1>
-            <p style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></p>
-            <p>Hold your hand above the controller and hold an imaginary bottle horizontally in your hand</p>
-            <p>Moving your hand to the right increases the value of the filter</p>
-            <p>Moving your hand to the left decreases the value of the filter</p>
-            <p style={{ marginTop: "1em", marginBottom: "1em" }}></p>
-            <h1 style={{ fontSize: "1.5em", fontWeight: "bold" }}>Changing filters:</h1>
-            <p style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></p>
-            <p>To change the filter you should hold your fully opened hand above the controller</p>
-            <p>Your palm should now face the controller</p>
-            <p>Moving the hand upwards or downwards can change them</p>
-            <p>The levels of filter control are based on the structure of the Studio page</p>
-          </div>
-        </div>
-      )}
+      {isOpen && <InstructionsModal isOpen={isOpen} onClose={closeModal} />}
 
       <div className="grid grid-cols-2 gap-10">
         <Audioplayer />
