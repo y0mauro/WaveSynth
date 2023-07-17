@@ -123,7 +123,6 @@ const LeapMotion = () => {
         {" "}
         Studio <SoundWaveIcon color="orange" />
       </h2>
-
       {/* <div>
         {handVisible && <div>Volume: {volume}</div>}
         {!handVisible && <div>Volume error: {volume}</div>}

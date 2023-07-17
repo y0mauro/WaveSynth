@@ -143,7 +143,7 @@ const AudioplayerRight: React.FC = () => {
       {filterNode && <LowControl lowFilter={lowFilter} />}
       <h2>Mid Control </h2>
       {filterNode && <MidControl midFilter={midFilter} />}
-      <h2>High Filter </h2>
+      <h2>High Control </h2>
       {filterNode && <HighControl highFilter={highFilter} />}
       <h2>Delay </h2>
       {filterNode && <DelayControl delayNode={delayNode} />}
@@ -185,7 +185,7 @@ function LowControl({ lowFilter }: { lowFilter: BiquadFilterNode }) {
         step="0.1"
         value={lowShelfLeap}
       ></input>
-      <span className="font-semibold"> {lowShelfLeap}</span>
+      <span className="font-semibold"> {lowShelfLeap.toFixed(2)}</span>
     </div>
   );
 }
@@ -215,7 +215,7 @@ function MidControl({ midFilter }: { midFilter: BiquadFilterNode }) {
         step="0.1"
         value={midLeap}
       ></input>
-      <span className="font-semibold"> {midLeap}</span>
+      <span className="font-semibold"> {midLeap.toFixed(2)}</span>
     </div>
   );
 }
@@ -249,7 +249,7 @@ function HighControl({ highFilter }: { highFilter: BiquadFilterNode }) {
         step="0.1"
         value={highLeap}
       ></input>
-      <span className="font-semibold"> {highLeap}</span>
+      <span className="font-semibold"> {highLeap.toFixed(2)}</span>
     </div>
   );
 }
@@ -280,7 +280,7 @@ function DelayControl({ delayNode }: { delayNode: DelayNode }) {
         step="0.1"
         value={delayLeap}
       ></input>
-      <span className="font-semibold"> {delayLeap}</span>
+      <span className="font-semibold"> {delayLeap.toFixed(2)}</span>
     </div>
   );
 }
@@ -312,7 +312,7 @@ function VolumnControl({ gainNode }: { gainNode: GainNode }) {
         value={volumeleap}
       />
 
-      <span className="font-semibold"> {volumeleap}</span>
+      <span className="font-semibold"> {volumeleap.toFixed(2)}</span>
     </div>
   );
 }
