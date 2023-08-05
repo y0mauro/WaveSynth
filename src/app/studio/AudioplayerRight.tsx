@@ -108,6 +108,20 @@ const AudioplayerRight: React.FC = () => {
       gainNode.connect(audioContext.destination);
     }
   };
+  const handleMicrophone = () => {
+    console.log("Microphone");
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream: MediaStream) => {
+        const audioContext = new AudioContext();
+        const microphone = audioContext.createMediaStreamSource(stream);
+        microphone.connect(audioContext.destination);
+        
+      })
+      .catch((err: Error) => {
+        alert(err);
+      });
+  };
 
   return (
     <div className="grid gap-1  h-fit p-5   shadow-inner">
@@ -139,14 +153,15 @@ const AudioplayerRight: React.FC = () => {
 
       <h2>Volume </h2>
       {gainNode && <VolumnControl gainNode={gainNode} />}
-      <h2>Low Control </h2>
-      {filterNode && <LowControl lowFilter={lowFilter} />}
-      <h2>Mid Control </h2>
-      {filterNode && <MidControl midFilter={midFilter} />}
+      
       <h2>High Control </h2>
       {filterNode && <HighControl highFilter={highFilter} />}
-      <h2>Delay </h2>
-      {filterNode && <DelayControl delayNode={delayNode} />}
+      <h2>Mid Control </h2>
+      {filterNode && <MidControl midFilter={midFilter} />}
+      <h2>Low Control </h2>
+      {filterNode && <LowControl lowFilter={lowFilter} />}
+      
+      <button onClick={handleMicrophone}>Microfon</button>
 
       <canvas ref={canvasRef} width={500} height={200} id="canvasVisualizer" />
 
@@ -180,7 +195,7 @@ function LowControl({ lowFilter }: { lowFilter: BiquadFilterNode }) {
         onChange={onLowShelfChange}
         className="w-11/12 accent-purple-700 focus:accent-[#ffd23f]"
         type="range"
-        min="-50"
+        min="-20"
         max="20"
         step="0.1"
         value={lowShelfLeap}

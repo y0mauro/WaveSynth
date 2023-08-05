@@ -137,14 +137,15 @@ const Audioplayer: React.FC = () => {
       )}
       <h2>Volume </h2>
       {gainNode && <VolumnControl gainNode={gainNode} />}
-      <h2>Low Control </h2>
-      {filterNode && <LowControl lowFilter={lowFilter} />}
-      <h2>Mid Control </h2>
-      {filterNode && <MidControl midFilter={midFilter} />}
+      
       <h2>High Control </h2>
       {filterNode && <HighControl highFilter={highFilter} />}
-      <h2>Delay </h2>
-      {filterNode && <DelayControl delayNode={delayNode} />}
+      <h2>Mid Control </h2>
+      {filterNode && <MidControl midFilter={midFilter} />}
+      <h2>Low Control </h2>
+      {filterNode && <LowControl lowFilter={lowFilter} />}
+      
+      
 
       <canvas ref={canvasRef} width={500} height={200} id="canvasVisualizer" />
 
@@ -176,7 +177,7 @@ function LowControl({ lowFilter }: { lowFilter: BiquadFilterNode }) {
         onChange={onLowShelfChange}
         className="w-11/12 accent-purple-700 focus:accent-[#2392f5]"
         type="range"
-        min="-50"
+        min="-20"
         max="20"
         step="0.1"
         value={lowShelfLeap}

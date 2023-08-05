@@ -24,7 +24,7 @@ const LeapMotion = () => {
   const [handVisible, setHandVisible] = useState(false);
   const [frish, setFrish] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -32,16 +32,6 @@ const LeapMotion = () => {
 
   useEffect(() => {
     // Callback khi có dữ liệu từ Leap Motion
-
-    const escapeListener = (e) => {
-      if (e.key === "Escape") {
-        closeModal();
-      }
-    };
-    window.addEventListener("keydown", escapeListener);
-
-    // Cleanup function to remove the listener when the component unmounts
-
     console.log("Leap Motion Run ");
     const handleFrame = (frame) => {
       if (frame.hands.length > 0) {
@@ -55,61 +45,41 @@ const LeapMotion = () => {
           const frishLeft = leftHand.grabStrength;
           if (frishLeft === 1) {
             console.log("left hand thay volume");
-            const newVolume = mapRange(leftY, 50, 400, 0, 1);
+            console.log("leftZ  " + leftZ);
+            const newVolume = mapRange(leftZ, -150, 200, 0, 1);
             setVolume(newVolume);
             dispatch(setVolume(newVolume));
-            if (leftZ) {
-              const newDelay = mapRange(leftZ, 50, 400, 0, 1);
-              setDelay(newDelay);
-              dispatch(setDelay(newDelay));
-            }
           }
-          const newFilterValue = mapRange(leftX, -150, 150, -50, 20);
-          if (leftY > 50 && leftY < 100 && frishLeft > 0.3 && frishLeft < 0.8) {
-            dispatch(setLow(newFilterValue));
-          } else if (
-            leftY > 200 &&
-            leftY < 300 &&
-            frishLeft > 0.3 &&
-            frishLeft < 0.8
-          ) {
+          const newFilterValue = mapRange(leftX, -150, 150, -20, 20);
+          const newFilterValueOnlyLow = mapRange(leftX, -100, 100, -20, 20);
+          if (leftY < 100 && frishLeft < 0.9) {
+            dispatch(setLow(newFilterValueOnlyLow));
+          } else if (leftY > 200 && leftY < 300 && frishLeft < 0.9) {
             dispatch(setMid(newFilterValue));
-          } else if (leftY > 350 && frishLeft > 0.3 && frishLeft < 0.8) {
+          } else if (leftY > 350 && frishLeft < 0.9) {
             dispatch(setHigh(newFilterValue));
           }
-        } else if (rightHand) {
+        }
+        if (rightHand) {
           const rightHandPosition = rightHand.palmPosition;
           const rightY = rightHandPosition[1];
           const rightX = rightHandPosition[0];
           const rightZ = rightHandPosition[2];
           const frishRight = rightHand.grabStrength;
           if (frishRight === 1) {
-            console.log("right hand thay volume is ");
-            const newVolume = mapRange(rightY, 50, 400, 0, 1);
+            console.log("right hand change volume");
+            console.log("rightZ  " + rightZ);
+            const newVolume = mapRange(rightZ, -150, 200, 0, 1);
             setVolumeRight(newVolume);
             dispatch(setVolumeRight(newVolume));
-            if (rightZ) {
-              const newDelay = mapRange(rightZ, 50, 400, 0, 1);
-              setDelayRight(newDelay);
-              dispatch(setDelayRight(newDelay));
-            }
           }
-          const newFilterValue = mapRange(rightX, -150, 150, -50, 20);
-          if (
-            rightY > 50 &&
-            rightY < 100 &&
-            frishRight > 0.3 &&
-            frishRight < 0.8
-          ) {
-            dispatch(setLowRight(newFilterValue));
-          } else if (
-            rightY > 200 &&
-            rightY < 300 &&
-            frishRight > 0.3 &&
-            frishRight < 0.8
-          ) {
+          const newFilterValue = mapRange(rightX, -150, 150, -20, 20);
+          const newFilterValueOnlyLow = mapRange(rightX, -100, 100, -20, 20);
+          if (rightY > 50 && rightY < 100 && frishRight < 0.9) {
+            dispatch(setLowRight(newFilterValueOnlyLow));
+          } else if (rightY > 200 && rightY < 300 && frishRight < 0.9) {
             dispatch(setMidRight(newFilterValue));
-          } else if (rightY > 350 && frishRight > 0.3 && frishRight < 0.8) {
+          } else if (rightY > 350 && frishRight < 0.9) {
             dispatch(setHighRight(newFilterValue));
           }
         }
